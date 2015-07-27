@@ -1,0 +1,2 @@
+# Config
+config.aod.difficulty=0 = Lose NO hearts; 1 = Lose 1 heart on death; 2 = Lose 5% of your max health on death; 3 = Lose 10% of your max health on death

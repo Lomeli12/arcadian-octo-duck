@@ -1,0 +1,12 @@
+[
+{
+  "modid": "aod",
+  "name": "Arcadian Octo Duck",
+  "description": "Raises the stakes of boss fights, brought to you by GitHub's suggested name feature.",
+  "version" : "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://www.lomeli12.net/",
+  "authorList": ["Lomeli12"],
+  "credits": "Lomeli12"
+}
+]
