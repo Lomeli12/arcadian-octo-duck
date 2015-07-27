@@ -2,6 +2,5 @@
 config.aod.difficulty=0 = Lose NO hearts; 1 = Lose 1 heart on death; 2 = Lose 5% of your max health on death; 3 = Lose 10% of your max health on death
 
 # Message
-message.aod.banDedicatedAdmin=
 message.aod.reason=Player ran out of hearts.
-message.aod.reasonKick=You've ran out of hearts to "live".
+message.aod.reasonKick=You've ran out of hearts to "live", game over.

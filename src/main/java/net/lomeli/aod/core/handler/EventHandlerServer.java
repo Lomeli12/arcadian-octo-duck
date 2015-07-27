@@ -46,9 +46,10 @@ public class EventHandlerServer {
                 if (player.getMaxHealth() <= ModConfig.difficulty.heartLoss(count, player.getMaxHealth())) {
                     MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
                     if (server != null) {
-                        if (server.isSinglePlayer() && player.getCommandSenderName().equals(server.getServerOwner()))
+                        if (server.isSinglePlayer() && player.getCommandSenderName().equals(server.getServerOwner())) {
+                            player.playerNetServerHandler.kickPlayerFromServer(StatCollector.translateToLocal("message.aod.reasonKick"));
                             server.deleteWorldAndStopServer();
-                        else {
+                        } else {
                             UserListBansEntry userBanList = new UserListBansEntry(player.getGameProfile(), null, AOD.NAME, null, StatCollector.translateToLocal("message.aod.reason"));
                             server.getConfigurationManager().func_152608_h().func_152687_a(userBanList);
                             player.playerNetServerHandler.kickPlayerFromServer(StatCollector.translateToLocal("message.aod.reasonKick"));
@@ -68,7 +69,7 @@ public class EventHandlerServer {
                 HealthModifierUtil.applyModifier(player, bossDeaths);
         }
     }
-    
+
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void configChanged(ConfigChangedEvent event) {
