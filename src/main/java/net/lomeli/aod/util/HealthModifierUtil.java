@@ -36,15 +36,15 @@ public class HealthModifierUtil {
         double health = -ModConfig.difficulty.heartLoss(amount, player.getMaxHealth());
         if (amount != 0)
             attributeInstance.applyModifier(new AttributeModifier(healthUUID, modifierTag, health, 0));
-        setHeartCount(player, amount);
+        setDeathCount(player, amount);
     }
 
-    public static void setHeartCount(EntityPlayer player, int amount) {
+    public static void setDeathCount(EntityPlayer player, int amount) {
         if (player != null && !PlayerUtil.isFakePlayer(player))
             player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger(heartTag, amount);
     }
 
-    public static int getHeartCount(EntityPlayer player) {
+    public static int getDeathCount(EntityPlayer player) {
         if (player != null && !PlayerUtil.isFakePlayer(player))
             return player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger(heartTag);
         return 0;

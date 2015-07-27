@@ -40,14 +40,15 @@ public class ModEventHandler {
             //if (player.theItemInWorldManager.getGameType() == WorldSettings.GameType.CREATIVE)
             //    return;
             if (damageSource != null && damageSource instanceof IBossDisplayData && !mobBlackList.contains(damageSource.getClass())) {
-                int count = HealthModifierUtil.getHeartCount(player) + 1;
-                HealthModifierUtil.setHeartCount(player, count);
+                int deathCount = HealthModifierUtil.getDeathCount(player) + 1;
+                HealthModifierUtil.setDeathCount(player, deathCount);
                 float playerHealth = PlayerUtil.getHealthWithoutMod(player);
-                if (playerHealth <= ModConfig.difficulty.heartLoss(count, playerHealth)) {
+                if (playerHealth <= ModConfig.difficulty.heartLoss(deathCount, playerHealth)) {
                     MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
                     if (server != null) {
                         if (server.isSinglePlayer() && player.getCommandSenderName().equals(server.getServerOwner())) {
                             player.playerNetServerHandler.kickPlayerFromServer(StatCollector.translateToLocal("message.aod.reasonKick"));
+                            server.logSevere("Player lost all hearts, time to die.");
                             server.deleteWorldAndStopServer();
                         } else {
                             UserListBansEntry userBanList = new UserListBansEntry(player.getGameProfile(), null, AOD.NAME, null, StatCollector.translateToLocal("message.aod.reason"));
@@ -64,10 +65,10 @@ public class ModEventHandler {
     public void playerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (!event.player.worldObj.isRemote && !PlayerUtil.isFakePlayer(event.player)) {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
-            int bossDeaths = HealthModifierUtil.getHeartCount(player);
+            int deathCount = HealthModifierUtil.getDeathCount(player);
             float playerHealth = PlayerUtil.getHealthWithoutMod(player);
-            if (playerHealth > ModConfig.difficulty.heartLoss(bossDeaths, playerHealth))
-                HealthModifierUtil.applyModifier(player, bossDeaths);
+            if (playerHealth > ModConfig.difficulty.heartLoss(deathCount, playerHealth))
+                HealthModifierUtil.applyModifier(player, deathCount);
         }
     }
 
