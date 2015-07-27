@@ -10,7 +10,7 @@ import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 import net.lomeli.aod.core.config.ModConfig;
-import net.lomeli.aod.core.handler.EventHandlerServer;
+import net.lomeli.aod.core.handler.ModEventHandler;
 import net.lomeli.aod.core.handler.IMCHandler;
 
 @Mod(modid = AOD.MOD_ID, name = AOD.NAME, version = AOD.VERSION, acceptedMinecraftVersions = AOD.MC_VERSION, guiFactory = AOD.FACTORY)
@@ -30,9 +30,9 @@ public class AOD {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        EventHandlerServer eventHandlerServer = new EventHandlerServer();
-        MinecraftForge.EVENT_BUS.register(eventHandlerServer);
-        FMLCommonHandler.instance().bus().register(eventHandlerServer);
+        ModEventHandler modEventHandler = new ModEventHandler();
+        MinecraftForge.EVENT_BUS.register(modEventHandler);
+        FMLCommonHandler.instance().bus().register(modEventHandler);
     }
 
     @Mod.EventHandler

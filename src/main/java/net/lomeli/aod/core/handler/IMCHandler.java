@@ -13,7 +13,7 @@ public class IMCHandler {
         if (imcMessages != null && imcMessages.size() > 0) {
             for (IMCMessage message : imcMessages) {
                 if (message != null && message.isStringMessage() && blackListKey.equalsIgnoreCase(message.key)) {
-                    EventHandlerServer.mobBlackList.add(message.getStringValue());
+                    ModEventHandler.mobBlackList.add(message.getStringValue());
                     LogUtil.logInfo("%s has blacklisted %s", message.getSender(), message.getStringValue());
                 }
             }

@@ -25,15 +25,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import net.lomeli.aod.AOD;
 import net.lomeli.aod.core.config.ModConfig;
-import net.lomeli.aod.util.FakePlayerUtil;
+import net.lomeli.aod.util.PlayerUtil;
 import net.lomeli.aod.util.HealthModifierUtil;
 
-public class EventHandlerServer {
+public class ModEventHandler {
     public static List<String> mobBlackList = Lists.newArrayList();
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onPlayerDeath(LivingDeathEvent event) {
-        if (!event.entityLiving.worldObj.isRemote && (event.entityLiving instanceof EntityPlayer && !FakePlayerUtil.isFakePlayer((EntityPlayer) event.entityLiving))) {
+        if (!event.entityLiving.worldObj.isRemote && (event.entityLiving instanceof EntityPlayer && !PlayerUtil.isFakePlayer((EntityPlayer) event.entityLiving))) {
             EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
             Entity damageSource = getDamageSource(event.source);
             // Removed temporarily for debugging
@@ -42,8 +42,8 @@ public class EventHandlerServer {
             if (damageSource != null && damageSource instanceof IBossDisplayData && !mobBlackList.contains(damageSource.getClass())) {
                 int count = HealthModifierUtil.getHeartCount(player) + 1;
                 HealthModifierUtil.setHeartCount(player, count);
-                HealthModifierUtil.removeModifier(player);
-                if (player.getMaxHealth() <= ModConfig.difficulty.heartLoss(count, player.getMaxHealth())) {
+                float playerHealth = PlayerUtil.getHealthWithoutMod(player);
+                if (playerHealth <= ModConfig.difficulty.heartLoss(count, playerHealth)) {
                     MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
                     if (server != null) {
                         if (server.isSinglePlayer() && player.getCommandSenderName().equals(server.getServerOwner())) {
@@ -62,10 +62,11 @@ public class EventHandlerServer {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void playerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.player.worldObj.isRemote && !FakePlayerUtil.isFakePlayer(event.player)) {
+        if (!event.player.worldObj.isRemote && !PlayerUtil.isFakePlayer(event.player)) {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
             int bossDeaths = HealthModifierUtil.getHeartCount(player);
-            if (player.getMaxHealth() > ModConfig.difficulty.heartLoss(bossDeaths, player.getMaxHealth()))
+            float playerHealth = PlayerUtil.getHealthWithoutMod(player);
+            if (playerHealth > ModConfig.difficulty.heartLoss(bossDeaths, playerHealth))
                 HealthModifierUtil.applyModifier(player, bossDeaths);
         }
     }

@@ -10,9 +10,10 @@ public class ModConfig {
 
     public static void loadConfig() {
         String cat = config.CATEGORY_GENERAL;
-        difficulty = EnumDifficulty.getDifficulty(config.getInt("difficulty", cat, 1, 0, 3, StatCollector.translateToLocal("config.aod.difficulty")));
+        int i = config.getInt("difficulty", cat, 1, 0, 3, StatCollector.translateToLocal("config.aod.difficulty"));
+        difficulty = EnumDifficulty.getDifficulty(i);
 
         if (config.hasChanged())
-            config.load();
+            config.save();
     }
 }

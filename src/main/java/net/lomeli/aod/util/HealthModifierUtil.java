@@ -32,6 +32,7 @@ public class HealthModifierUtil {
 
     public static void applyModifier(EntityPlayer player, int amount) {
         IAttributeInstance attributeInstance = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+        removeModifier(player);
         double health = -ModConfig.difficulty.heartLoss(amount, player.getMaxHealth());
         if (amount != 0)
             attributeInstance.applyModifier(new AttributeModifier(healthUUID, modifierTag, health, 0));
@@ -39,12 +40,12 @@ public class HealthModifierUtil {
     }
 
     public static void setHeartCount(EntityPlayer player, int amount) {
-        if (player != null && !FakePlayerUtil.isFakePlayer(player))
+        if (player != null && !PlayerUtil.isFakePlayer(player))
             player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger(heartTag, amount);
     }
 
     public static int getHeartCount(EntityPlayer player) {
-        if (player != null && !FakePlayerUtil.isFakePlayer(player))
+        if (player != null && !PlayerUtil.isFakePlayer(player))
             return player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger(heartTag);
         return 0;
     }
