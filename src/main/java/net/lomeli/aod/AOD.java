@@ -5,6 +5,7 @@ import net.minecraftforge.common.config.Configuration;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
@@ -12,7 +13,7 @@ import net.lomeli.aod.core.config.ModConfig;
 import net.lomeli.aod.core.handler.EventHandlerServer;
 import net.lomeli.aod.core.handler.IMCHandler;
 
-@Mod(modid = AOD.MOD_ID, name = AOD.NAME, version = AOD.VERSION, acceptedMinecraftVersions = AOD.MC_VERSION)
+@Mod(modid = AOD.MOD_ID, name = AOD.NAME, version = AOD.VERSION, acceptedMinecraftVersions = AOD.MC_VERSION, guiFactory = AOD.FACTORY)
 public class AOD {
     public static final String MOD_ID = "aod";
     public static final String NAME = "Arcadian Octo Duck";
@@ -25,7 +26,10 @@ public class AOD {
     public void preInit(FMLPreInitializationEvent event) {
         ModConfig.config = new Configuration(event.getSuggestedConfigurationFile());
         ModConfig.loadConfig();
+    }
 
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event) {
         EventHandlerServer eventHandlerServer = new EventHandlerServer();
         MinecraftForge.EVENT_BUS.register(eventHandlerServer);
         FMLCommonHandler.instance().bus().register(eventHandlerServer);

@@ -32,7 +32,7 @@ public class HealthModifierUtil {
 
     public static void applyModifier(EntityPlayer player, int amount) {
         IAttributeInstance attributeInstance = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
-        double health = player.getMaxHealth() - ModConfig.difficulty.heartLoss(amount, player.getMaxHealth());
+        double health = -ModConfig.difficulty.heartLoss(amount, player.getMaxHealth());
         if (amount != 0)
             attributeInstance.applyModifier(new AttributeModifier(healthUUID, modifierTag, health, 0));
         setHeartCount(player, amount);

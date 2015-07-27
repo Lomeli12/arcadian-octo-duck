@@ -22,7 +22,7 @@ public enum EnumDifficulty {
         if (loss == 0)
             return 0;
         else if (loss == 1)
-            return count;
+            return count * 2;
         else
             return count * (maxHealth / loss);
     }
