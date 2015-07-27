@@ -8,15 +8,22 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.UserListBansEntry;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.WorldSettings;
 
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 
+import net.lomeli.aod.AOD;
+import net.lomeli.aod.core.config.ModConfig;
 import net.lomeli.aod.util.FakePlayerUtil;
 import net.lomeli.aod.util.HealthModifierUtil;
 
@@ -39,8 +46,22 @@ public class EventHandlerServer {
     public void playerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (!event.player.worldObj.isRemote && !FakePlayerUtil.isFakePlayer(event.player)) {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
+            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+
             int bossDeaths = HealthModifierUtil.getHeartCount(player);
 
+            HealthModifierUtil.removeModifier(player);
+            if (player.getMaxHealth() > ModConfig.difficulty.heartLoss(bossDeaths, player.getMaxHealth()))
+                HealthModifierUtil.applyModifier(player, bossDeaths);
+            else {
+                if (server != null && !server.isDedicatedServer() && server.getServerOwner() != null && server.getServerOwner().equals(player.getCommandSenderName()))
+                    player.addChatComponentMessage(new ChatComponentTranslation("message.aod.banDedicatedAdmin"));
+                else {
+                    UserListBansEntry userBanList = new UserListBansEntry(player.getGameProfile(), null, AOD.NAME, null, StatCollector.translateToLocal("message.aod.reason"));
+                    server.getConfigurationManager().func_152608_h().func_152687_a(userBanList);
+                    player.playerNetServerHandler.kickPlayerFromServer( StatCollector.translateToLocal("message.aod.reasonKick"));
+                }
+            }
         }
     }
 

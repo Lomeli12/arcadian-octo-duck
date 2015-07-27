@@ -1,4 +1,4 @@
-package net.lomeli.aod.core;
+package net.lomeli.aod.core.config;
 
 import net.minecraft.util.StatCollector;
 

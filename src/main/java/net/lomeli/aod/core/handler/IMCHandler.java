@@ -8,6 +8,7 @@ import net.lomeli.aod.util.LogUtil;
 
 public class IMCHandler {
     private static final String blackListKey = "boss_black_list";
+
     public static void processIMCMessages(List<IMCMessage> imcMessages) {
         if (imcMessages != null && imcMessages.size() > 0) {
             for (IMCMessage message : imcMessages) {

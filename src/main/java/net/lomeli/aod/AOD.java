@@ -8,7 +8,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-import net.lomeli.aod.core.ModConfig;
+import net.lomeli.aod.core.config.ModConfig;
 import net.lomeli.aod.core.handler.EventHandlerServer;
 import net.lomeli.aod.core.handler.IMCHandler;
 
@@ -19,6 +19,7 @@ public class AOD {
     public static final int MAJOR = 1, MINOR = 0, REV = 0;
     public static final String VERSION = MAJOR + "." + MINOR + "." + REV;
     public static final String MC_VERSION = "1.7.10";
+    public static final String FACTORY = "net.lomeli.aod.core.config.AODGuiConfigFactory";
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

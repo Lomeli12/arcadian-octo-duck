@@ -1,25 +1,21 @@
-package net.lomeli.aod.core;
+package net.lomeli.aod.core.config;
 
 public enum EnumDifficulty {
-    EASY(0, 0), NORMAL(1, 1), HARD(2, 5), VERY_HARD(3, 10);
+    EASY(0), NORMAL(1), HARD(5), VERY_HARD(10);
 
-    public static EnumDifficulty[] VALID_VALUES = new EnumDifficulty[4];
+    public static final EnumDifficulty[] VALID_VALUES = new EnumDifficulty[4];
+
     static {
         VALID_VALUES[0] = EASY;
         VALID_VALUES[1] = NORMAL;
         VALID_VALUES[2] = HARD;
         VALID_VALUES[3] = VERY_HARD;
     }
-    private final int id;
+
     private final int loss;
 
-    EnumDifficulty(int id, int loss) {
-        this.id = id;
+    EnumDifficulty(int loss) {
         this.loss = loss;
-    }
-
-    public int getID() {
-        return this.id;
     }
 
     public float heartLoss(int count, float maxHealth) {
@@ -31,9 +27,7 @@ public enum EnumDifficulty {
             return count * (maxHealth / loss);
     }
 
-
     public static EnumDifficulty getDifficulty(int i) {
         return i < VALID_VALUES.length ? VALID_VALUES[i] : NORMAL;
     }
-
 }
