@@ -30,6 +30,7 @@ import net.lomeli.aod.util.PlayerUtil;
 
 public class ModEventHandler {
     public static List<String> mobBlackList = Lists.newArrayList();
+    public static List<String> mobWhiteList = Lists.newArrayList();
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onPlayerDeath(LivingDeathEvent event) {
@@ -40,7 +41,7 @@ public class ModEventHandler {
                 // Removed temporarily for debugging
                 //if (player.theItemInWorldManager.getGameType() == WorldSettings.GameType.CREATIVE)
                 //    return;
-                if (damageSource != null && damageSource instanceof IBossDisplayData && !mobBlackList.contains(damageSource.getClass())) {
+                if (isBossOrValidMob(damageSource) && !mobBlackList.contains(damageSource.getClass().getName())) {
                     int deathCount = HealthModifierUtil.getDeathCount(player) + 1;
                     HealthModifierUtil.setDeathCount(player, deathCount);
                     float playerHealth = PlayerUtil.getHealthWithoutMod(player);
@@ -59,7 +60,7 @@ public class ModEventHandler {
                         }
                     }
                 }
-            } else if (event.entityLiving instanceof IBossDisplayData && damageSource != null && damageSource instanceof EntityPlayer) {
+            } else if (isBossOrValidMob(event.entityLiving) && !mobBlackList.contains(event.entityLiving.getClass().getName()) && damageSource != null && damageSource instanceof EntityPlayer) {
                 EntityPlayerMP player = (EntityPlayerMP) damageSource;
                 int deathCount = HealthModifierUtil.getDeathCount(player);
                 if (ModConfig.regainHeart && deathCount > 0 && !player.capabilities.isCreativeMode) {
@@ -89,6 +90,10 @@ public class ModEventHandler {
     public void configChanged(ConfigChangedEvent event) {
         if (AOD.MOD_ID.equals(event.modID))
             ModConfig.loadConfig();
+    }
+
+    private boolean isBossOrValidMob(Entity entity) {
+        return entity != null  ? (entity instanceof IBossDisplayData || mobWhiteList.contains(entity.getClass().getName())) : false;
     }
 
     private Entity getDamageSource(DamageSource source) {

@@ -20,6 +20,7 @@ public class ModConfig {
         difficulty = EnumDifficulty.getDifficulty(i);
         regainHeart = config.getBoolean("regainHeart", cat, true, StatCollector.translateToLocal("config.aod.regainHeart"));
         String blackList = config.getString("blackList", cat, "", StatCollector.translateToLocal("config.aod.blackList"));
+        String whiteList = config.getString("whiteList", cat, "", StatCollector.translateToLocal("config.aod.whiteList"));
 
         if (!Strings.isNullOrEmpty(blackList)) {
             String[] entities = blackList.split(";");
@@ -29,6 +30,18 @@ public class ModConfig {
                         continue;
                     LogUtil.logInfo("%s has been blacklisted via configs", clazz);
                     ModEventHandler.mobBlackList.add(clazz);
+                }
+            }
+        }
+
+        if (!Strings.isNullOrEmpty(whiteList)) {
+            String[] entities = whiteList.split(";");
+            if (entities != null && entities.length > 0) {
+                for (String clazz : entities) {
+                    if (Strings.isNullOrEmpty(clazz))
+                        continue;
+                    LogUtil.logInfo("%s has been whitelisted via configs", clazz);
+                    ModEventHandler.mobWhiteList.add(clazz);
                 }
             }
         }
