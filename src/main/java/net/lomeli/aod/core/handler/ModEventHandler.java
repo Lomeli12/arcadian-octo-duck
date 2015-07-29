@@ -64,7 +64,7 @@ public class ModEventHandler {
                 EntityPlayerMP player = (EntityPlayerMP) damageSource;
                 int deathCount = HealthModifierUtil.getDeathCount(player);
                 if (ModConfig.regainHeart && deathCount > 0 && !player.capabilities.isCreativeMode) {
-                    HealthModifierUtil.setDeathCount(player, ++deathCount);
+                    HealthModifierUtil.setDeathCount(player, --deathCount);
                     if (deathCount != 0)
                         HealthModifierUtil.applyModifier(player, deathCount);
                     else
