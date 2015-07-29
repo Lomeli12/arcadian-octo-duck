@@ -6,9 +6,9 @@ public enum EnumDifficulty {
     public static final EnumDifficulty[] VALID_VALUES = new EnumDifficulty[3];
 
     static {
-        VALID_VALUES[1] = NORMAL;
-        VALID_VALUES[2] = HARD;
-        VALID_VALUES[3] = VERY_HARD;
+        VALID_VALUES[0] = NORMAL;
+        VALID_VALUES[1] = HARD;
+        VALID_VALUES[2] = VERY_HARD;
     }
 
     private final int loss;
