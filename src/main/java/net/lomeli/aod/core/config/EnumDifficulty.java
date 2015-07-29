@@ -1,12 +1,11 @@
 package net.lomeli.aod.core.config;
 
 public enum EnumDifficulty {
-    EASY(0), NORMAL(1), HARD(5), VERY_HARD(10);
+    NORMAL(1), HARD(5), VERY_HARD(10);
 
-    public static final EnumDifficulty[] VALID_VALUES = new EnumDifficulty[4];
+    public static final EnumDifficulty[] VALID_VALUES = new EnumDifficulty[3];
 
     static {
-        VALID_VALUES[0] = EASY;
         VALID_VALUES[1] = NORMAL;
         VALID_VALUES[2] = HARD;
         VALID_VALUES[3] = VERY_HARD;
@@ -19,9 +18,7 @@ public enum EnumDifficulty {
     }
 
     public float heartLoss(int count, float maxHealth) {
-        if (loss == 0)
-            return 0;
-        else if (loss == 1)
+        if (loss == 1)
             return count * 2;
         else
             return count * (maxHealth / loss);

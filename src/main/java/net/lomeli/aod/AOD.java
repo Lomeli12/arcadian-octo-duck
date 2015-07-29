@@ -12,6 +12,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.lomeli.aod.core.config.ModConfig;
 import net.lomeli.aod.core.handler.ModEventHandler;
 import net.lomeli.aod.core.handler.IMCHandler;
+import net.lomeli.aod.util.LogUtil;
 
 @Mod(modid = AOD.MOD_ID, name = AOD.NAME, version = AOD.VERSION, acceptedMinecraftVersions = AOD.MC_VERSION, guiFactory = AOD.FACTORY)
 public class AOD {
@@ -24,12 +25,14 @@ public class AOD {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        LogUtil.logInfo("Pre-Initialization");
         ModConfig.config = new Configuration(event.getSuggestedConfigurationFile());
         ModConfig.loadConfig();
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        LogUtil.logInfo("Initialization");
         ModEventHandler modEventHandler = new ModEventHandler();
         MinecraftForge.EVENT_BUS.register(modEventHandler);
         FMLCommonHandler.instance().bus().register(modEventHandler);
@@ -37,6 +40,7 @@ public class AOD {
 
     @Mod.EventHandler
     public void imcMessage(FMLInterModComms.IMCEvent event) {
+        LogUtil.logInfo("Handling IMC Messages");
         IMCHandler.processIMCMessages(event.getMessages());
     }
 }

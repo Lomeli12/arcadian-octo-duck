@@ -25,37 +25,49 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import net.lomeli.aod.AOD;
 import net.lomeli.aod.core.config.ModConfig;
-import net.lomeli.aod.util.PlayerUtil;
 import net.lomeli.aod.util.HealthModifierUtil;
+import net.lomeli.aod.util.PlayerUtil;
 
 public class ModEventHandler {
     public static List<String> mobBlackList = Lists.newArrayList();
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onPlayerDeath(LivingDeathEvent event) {
-        if (!event.entityLiving.worldObj.isRemote && (event.entityLiving instanceof EntityPlayer && !PlayerUtil.isFakePlayer((EntityPlayer) event.entityLiving))) {
-            EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
+        if (!event.entityLiving.worldObj.isRemote) {
             Entity damageSource = getDamageSource(event.source);
-            // Removed temporarily for debugging
-            //if (player.theItemInWorldManager.getGameType() == WorldSettings.GameType.CREATIVE)
-            //    return;
-            if (damageSource != null && damageSource instanceof IBossDisplayData && !mobBlackList.contains(damageSource.getClass())) {
-                int deathCount = HealthModifierUtil.getDeathCount(player) + 1;
-                HealthModifierUtil.setDeathCount(player, deathCount);
-                float playerHealth = PlayerUtil.getHealthWithoutMod(player);
-                if (playerHealth <= ModConfig.difficulty.heartLoss(deathCount, playerHealth)) {
-                    MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-                    if (server != null) {
-                        if (server.isSinglePlayer() && player.getCommandSenderName().equals(server.getServerOwner())) {
-                            player.playerNetServerHandler.kickPlayerFromServer(StatCollector.translateToLocal("message.aod.reasonKick"));
-                            server.logSevere("Player lost all hearts, time to die.");
-                            server.deleteWorldAndStopServer();
-                        } else {
-                            UserListBansEntry userBanList = new UserListBansEntry(player.getGameProfile(), null, AOD.NAME, null, StatCollector.translateToLocal("message.aod.reason"));
-                            server.getConfigurationManager().func_152608_h().func_152687_a(userBanList);
-                            player.playerNetServerHandler.kickPlayerFromServer(StatCollector.translateToLocal("message.aod.reasonKick"));
+            if (event.entityLiving instanceof EntityPlayer && !PlayerUtil.isFakePlayer((EntityPlayer) event.entityLiving)) {
+                EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
+                // Removed temporarily for debugging
+                //if (player.theItemInWorldManager.getGameType() == WorldSettings.GameType.CREATIVE)
+                //    return;
+                if (damageSource != null && damageSource instanceof IBossDisplayData && !mobBlackList.contains(damageSource.getClass())) {
+                    int deathCount = HealthModifierUtil.getDeathCount(player) + 1;
+                    HealthModifierUtil.setDeathCount(player, deathCount);
+                    float playerHealth = PlayerUtil.getHealthWithoutMod(player);
+                    if (playerHealth <= ModConfig.difficulty.heartLoss(deathCount, playerHealth)) {
+                        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+                        if (server != null) {
+                            if (server.isSinglePlayer() && player.getCommandSenderName().equals(server.getServerOwner())) {
+                                player.playerNetServerHandler.kickPlayerFromServer(StatCollector.translateToLocal("message.aod.reasonKick"));
+                                server.logSevere("Player lost all hearts, time to die.");
+                                server.deleteWorldAndStopServer();
+                            } else {
+                                UserListBansEntry userBanList = new UserListBansEntry(player.getGameProfile(), null, AOD.NAME, null, StatCollector.translateToLocal("message.aod.reason"));
+                                server.getConfigurationManager().func_152608_h().func_152687_a(userBanList);
+                                player.playerNetServerHandler.kickPlayerFromServer(StatCollector.translateToLocal("message.aod.reasonKick"));
+                            }
                         }
                     }
+                }
+            } else if (event.entityLiving instanceof IBossDisplayData && damageSource != null && damageSource instanceof EntityPlayer) {
+                EntityPlayerMP player = (EntityPlayerMP) damageSource;
+                int deathCount = HealthModifierUtil.getDeathCount(player);
+                if (ModConfig.regainHeart && deathCount > 0 && !player.capabilities.isCreativeMode) {
+                    HealthModifierUtil.setDeathCount(player, ++deathCount);
+                    if (deathCount != 0)
+                        HealthModifierUtil.applyModifier(player, deathCount);
+                    else
+                        HealthModifierUtil.removeModifier(player);
                 }
             }
         }
