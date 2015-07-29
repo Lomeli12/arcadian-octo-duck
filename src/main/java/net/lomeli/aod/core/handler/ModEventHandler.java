@@ -85,6 +85,15 @@ public class ModEventHandler {
         }
     }
 
+    @SubscribeEvent
+    public void playerLoggedin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!event.player.worldObj.isRemote && HealthModifierUtil.hasModifier(event.player)) {
+            int deathCount = HealthModifierUtil.getDeathCount(event.player);
+            if (deathCount > 0)
+                HealthModifierUtil.applyModifier(event.player, deathCount);
+        }
+    }
+
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void configChanged(ConfigChangedEvent event) {
@@ -93,7 +102,7 @@ public class ModEventHandler {
     }
 
     private boolean isBossOrValidMob(Entity entity) {
-        return entity != null  ? (entity instanceof IBossDisplayData || mobWhiteList.contains(entity.getClass().getName())) : false;
+        return entity != null ? (entity instanceof IBossDisplayData || mobWhiteList.contains(entity.getClass().getName())) : false;
     }
 
     private Entity getDamageSource(DamageSource source) {

@@ -49,4 +49,10 @@ public class HealthModifierUtil {
             return player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger(heartTag);
         return 0;
     }
+
+    public static boolean hasModifier(EntityPlayer player) {
+        if (player != null && !PlayerUtil.isFakePlayer(player))
+            return player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasKey(heartTag, 3);
+        return false;
+    }
 }
