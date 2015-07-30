@@ -26,6 +26,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.lomeli.aod.AOD;
 import net.lomeli.aod.core.config.ModConfig;
 import net.lomeli.aod.util.HealthModifierUtil;
+import net.lomeli.aod.util.LogUtil;
 import net.lomeli.aod.util.PlayerUtil;
 
 public class ModEventHandler {
@@ -50,7 +51,7 @@ public class ModEventHandler {
                         if (server != null) {
                             if (server.isSinglePlayer() && player.getCommandSenderName().equals(server.getServerOwner())) {
                                 player.playerNetServerHandler.kickPlayerFromServer(StatCollector.translateToLocal("message.aod.reasonKick"));
-                                server.logSevere("Player lost all hearts, time to die.");
+                                LogUtil.logWarn("Player %s lost all hearts, time to die.", player.getCommandSenderName());
                                 server.deleteWorldAndStopServer();
                             } else {
                                 UserListBansEntry userBanList = new UserListBansEntry(player.getGameProfile(), null, AOD.NAME, null, StatCollector.translateToLocal("message.aod.reason"));

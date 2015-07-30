@@ -18,7 +18,7 @@ import net.lomeli.aod.util.LogUtil;
 public class AOD {
     public static final String MOD_ID = "aod";
     public static final String NAME = "Arcadian Octo Duck";
-    public static final int MAJOR = 1, MINOR = 0, REV = 0;
+    public static final int MAJOR = 1, MINOR = 0, REV = 1;
     public static final String VERSION = MAJOR + "." + MINOR + "." + REV;
     public static final String MC_VERSION = "1.7.10";
     public static final String FACTORY = "net.lomeli.aod.core.config.AODGuiConfigFactory";
