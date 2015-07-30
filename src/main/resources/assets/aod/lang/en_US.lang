@@ -1,0 +1,9 @@
+# Config
+config.aod.difficulty=0 = Lose 1 heart on death; 1 = Lose 5% of your max health on death; 2 = Lose 10% of your max health on death
+config.aod.regainHeart=Regain a lost heart when you kill a boss.
+config.aod.blackList=Blacklist certain mobs with their class names. Separate them with semi-colons (ex: net.minecraft.entity.boss.EntityDragon;vazkii.botania.common.entity.EntityDoppleganger;tconstruct.world.entity.KingBlueSlime)
+config.aod.whiteList=Whitelist mobs with their class names. Separate them with semi-colons (ex: net.minecraft.entity.passive.EntityPig;toast.specialMobs.entity.spider.EntityBabySpider;net.lomeli.ec.entity.EntityBigBadCreep)
+
+# Message
+message.aod.reason=Player ran out of hearts.
+message.aod.reasonKick=You've ran out of hearts to "live", game over.
