@@ -35,7 +35,7 @@ archivesBaseName = "$modName"
 version = "$releaseVersion"
 
 minecraft {
-    version = "$mcVersion-$forgeVersion-$mcVersion" // grab latest forge
+    version = "$mcVersion-$forgeVersion" // grab latest forge
     runDir = "eclipse"
 }
 
